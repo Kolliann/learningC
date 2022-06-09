@@ -92,11 +92,11 @@ int main(){
         }
     }
 
-    remove_value(dynamicArray , 4.0);
+    remove_value( dynamicArray, 4.0 );
 
-    print_container(dynamicArray);
+    print_container( dynamicArray );
 
-    find_min_max_value( dynamicArray ) ;
+    find_min_max_value( dynamicArray );
 
     return 0;
 }
