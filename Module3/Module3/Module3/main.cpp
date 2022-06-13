@@ -1,12 +1,12 @@
 #include <iostream>
 #include <vector>
-#include <MathCalcLib.h>
+#include "MathCalcLib.h"
 
 int GetOperationNumber();
 void AvailableOperations();
-std::vector<double> GetValue(bool flag);
+std::vector<double> EnterArguments(int);
 char ContinuationOfTheCalculation();
-
+bool IsSecondArgumentRequired(int);
 
 int main() {
 
@@ -24,76 +24,60 @@ int main() {
 		{
 
 		case 1:
-			std::cout << "Answer " << Sum(GetValue(true)) << std::endl;
-			chSymbol = ContinuationOfTheCalculation();
+			std::cout << "Answer " << Sum(EnterArguments(1)) << std::endl;
 			break;
 		case 2:
-			std::cout << "Answer " << Difference(GetValue(true)) << std::endl;
-			chSymbol = ContinuationOfTheCalculation();
+			std::cout << "Answer " << Difference(EnterArguments(2)) << std::endl;
 			break;
 		case 3:
-			std::cout << "Answer " << Multiplication(GetValue(true)) << std::endl;
-			chSymbol = ContinuationOfTheCalculation();
+			std::cout << "Answer " << Multiplication(EnterArguments(3)) << std::endl;
 			break;
 		case 4:
-			std::cout << "Answer " << Division(GetValue(true)) << std::endl;
-			chSymbol = ContinuationOfTheCalculation();
+			std::cout << "Answer " << Division(EnterArguments(4)) << std::endl;
 			break;
 		case 5:
-			std::cout << "Answer " << Exponentiation(GetValue(true)) << std::endl;
-			chSymbol = ContinuationOfTheCalculation();
+			std::cout << "Answer " << Exponentiation(EnterArguments(5)) << std::endl;
 			break;
 		case 6:
-			std::cout << "Answer " << NumberSquare(GetValue(false)) << std::endl;
-			chSymbol = ContinuationOfTheCalculation();
+			std::cout << "Answer " << NumberSquare(EnterArguments(6)) << std::endl;
 			break;
 		case 7:
-			std::cout << "Answer " << PartOfNumber(GetValue(false)) << std::endl;
-			chSymbol = ContinuationOfTheCalculation();
+			std::cout << "Answer " << PartOfNumber(EnterArguments(7)) << std::endl;
 			break;
 		case 8:
-			std::cout << "Answer " << ABS(GetValue(false)) << std::endl;
-			chSymbol = ContinuationOfTheCalculation();
+			std::cout << "Answer " << ABS(EnterArguments(8)) << std::endl;
 			break;
 		case 9:
-			std::cout << "Answer " << Exp(GetValue(false)) << std::endl;
-			chSymbol = ContinuationOfTheCalculation();
+			std::cout << "Answer " << Exp(EnterArguments(9)) << std::endl;
 			break;
 		case 10:
-			std::cout << "Answer " << Mod(GetValue(true)) << std::endl;
-			chSymbol = ContinuationOfTheCalculation();
+			std::cout << "Answer " << Mod(EnterArguments(10)) << std::endl;
 			break;
 		case 11:
-			std::cout << "Answer " << Sqrt(GetValue(false)) << std::endl;
-			chSymbol = ContinuationOfTheCalculation();
+			std::cout << "Answer " << Sqrt(EnterArguments(11)) << std::endl;
 			break;
 		case 12:
-			std::cout << "Answer " << Factorial(GetValue(false)) << std::endl;
-			chSymbol = ContinuationOfTheCalculation();
+			std::cout << "Answer " << Factorial(EnterArguments(12)) << std::endl;
 			break;
 		case 13:
-			std::cout << "Answer " << TenToThePowerOfx(GetValue(false)) << std::endl;
-			chSymbol = ContinuationOfTheCalculation();
+			std::cout << "Answer " << TenToThePowerOfx(EnterArguments(13)) << std::endl;
 			break;
 		case 14:
-			std::cout << "Answer " << Log(GetValue(false)) << std::endl;
-			chSymbol = ContinuationOfTheCalculation();
+			std::cout << "Answer " << Log(EnterArguments(14)) << std::endl;
 			break;
 		case 15:
-			std::cout << "Answer " << Ln(GetValue(false)) << std::endl;
-			chSymbol = ContinuationOfTheCalculation();
+			std::cout << "Answer " << Ln(EnterArguments(15)) << std::endl;
 			break;
 		case 16:
-			std::cout << "Answer " << Revers(GetValue(false)) << std::endl;
-			chSymbol = ContinuationOfTheCalculation();
+			std::cout << "Answer " << Revers(EnterArguments(16)) << std::endl;
 			break;
 		default:
 			std::cout << "Something went wrong " << std::endl; 
-			chSymbol = ContinuationOfTheCalculation();
 			break;
 		}
-	}
 
+		chSymbol = ContinuationOfTheCalculation();
+	}
 
 	return 0;
 }
@@ -136,7 +120,7 @@ void AvailableOperations() {
 
 }
 
-std::vector<double> GetValue(bool flag) {
+std::vector<double> EnterArguments(int operationNumber) {
 
 	std::vector<double> array;
 	double a;
@@ -145,14 +129,12 @@ std::vector<double> GetValue(bool flag) {
 	std::cin >> a;
 	array.push_back(a);
 
-
-	if (flag) {
+	if (IsSecondArgumentRequired(operationNumber)) {
 		double b;
 
 		std::cout << "Enter value b = " << std::endl;
 		std::cin >> b;
 		array.push_back(b);
-
 	}
 
 	return array;
@@ -163,5 +145,13 @@ char ContinuationOfTheCalculation() {
 	std::cout << "Want to count more? y/n" << std::endl;
 	std::cin >> answer;
 	return answer;
+}
+
+bool IsSecondArgumentRequired(int operation)
+{
+	if (operation <= 5 || operation == 10)
+		return true;
+
+	return false;
 }
 
