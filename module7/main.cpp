@@ -4,10 +4,10 @@
 #include <array>
 #include <random>
 
-void PrintContainer(const std::vector<double>& container);
+void PrintContainer(const std::vector<int>& container);
 void PrintContainer(const std::array<int, 100>& container);
-void FindMinMaxValue(const std::vector<double>& container);
-void RemoveMultiples(std::vector<double>& container, double value);
+void FindMinMaxValue(const std::vector<int>& container);
+void RemoveMultiples(std::vector<int>& container, int value);
 
     int main()
     {
@@ -15,7 +15,7 @@ void RemoveMultiples(std::vector<double>& container, double value);
         std::mt19937 gen(rd());
         std::uniform_int_distribution<> distrib(-25, 25);
         std::array<int, 100> array = {0};
-        std::vector<double> dynamicArray;
+        std::vector<int> dynamicArray;
 
         for (int &i: array) {
             i = distrib(gen);
@@ -25,7 +25,7 @@ void RemoveMultiples(std::vector<double>& container, double value);
 
         for (int i: array) {
             if (i % 2 == 0) {
-                dynamicArray.push_back(static_cast<double>(i));
+                dynamicArray.push_back(i);
             }
         }
 
@@ -33,16 +33,16 @@ void RemoveMultiples(std::vector<double>& container, double value);
 
         //Логика замены элементов. Пробегаемся только до половины так как дальше нет смысла считать
         for (int i = 0; i < dynamicArray.size() / 2; ++i) {
-            if (dynamicArray[(dynamicArray.size() - 1) - i] != 0) {
+            int opponent = dynamicArray[(dynamicArray.size() - 1) - i];
+            if ( opponent != 0) {
                 double tmp = dynamicArray[i];
-                dynamicArray[i] = std::fmod(dynamicArray[i], dynamicArray[(dynamicArray.size() - 1) - i]);
+                dynamicArray[i] = std::fmod(dynamicArray[i], opponent);
                 if (tmp != 0)
-                    dynamicArray[(dynamicArray.size() - 1) - i] = std::fmod(dynamicArray[(dynamicArray.size() - 1) - i],
-                                                                            tmp);
+                    dynamicArray[(dynamicArray.size() - 1) - i] = std::fmod(opponent, tmp);
             }
         }
 
-        RemoveMultiples(dynamicArray, 4.0);
+        RemoveMultiples(dynamicArray, 4);
 
         PrintContainer(dynamicArray);
 
@@ -56,9 +56,9 @@ void RemoveMultiples(std::vector<double>& container, double value);
     //
     // Выводит переданный вектор в консоль.
     // ********************************************************************************************
-    void PrintContainer(const std::vector<double>& container)
+    void PrintContainer(const std::vector<int>& container)
     {
-        for (auto &item: container) {
+        for (const int& item: container) {
          std::cout << item << " ";
         }
         std::cout << '\n';
@@ -82,7 +82,7 @@ void RemoveMultiples(std::vector<double>& container, double value);
     //
     // Поиск минимального и максимального числа
     // ********************************************************************************************
-    void FindMinMaxValue(const std::vector<double>& container)
+    void FindMinMaxValue(const std::vector<int>& container)
     {
         const auto [min, max] = std::minmax_element(begin(container), end(container));
         std::cout << "min = " << *min << ", max = " << *max << '\n';
@@ -93,12 +93,15 @@ void RemoveMultiples(std::vector<double>& container, double value);
     //
     // Удаляем из массива все картные 4 числа
     // ********************************************************************************************
-    void RemoveMultiples(std::vector<double>& container, double value)
+    void RemoveMultiples(std::vector<int>& container, int value)
     {
-       for (auto i = container.begin(); i != container.end(); ++i) {
+       for (std::vector<int>::iterator i = container.begin(); i != container.end(); ) {
            if (std::fmod(*i, value) == 0) {
-               container.erase(i);
-               i--;
+              i = container.erase(i);
+
+           }else {
+               ++i;
+
            }
        }
     }
