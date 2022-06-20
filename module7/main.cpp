@@ -1,102 +1,107 @@
 #include <iostream>
 #include <cmath>
-#include <map>
 #include <vector>
 #include <array>
 #include <random>
 
-// ********************************************************************************************
-// print_container
-//
-// Выводит переданный вектор в консоль.
-// ********************************************************************************************
-void print_container(const std::vector<double>& container)
-{
-    for (auto& item: container)
+void PrintContainer(const std::vector<int>& container);
+void PrintContainer(const std::array<int, 100>& container);
+void FindMinMaxValue(const std::vector<int>& container);
+void RemoveMultiples(std::vector<int>& container, int value);
+
+    int main()
     {
-        std::cout << item << " ";
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<> distrib(-25, 25);
+        std::array<int, 100> array = {0};
+        std::vector<int> dynamicArray;
+
+        for (int &i: array) {
+            i = distrib(gen);
+        }
+
+        PrintContainer(array);
+
+        for (int i: array) {
+            if (i % 2 == 0) {
+                dynamicArray.push_back(i);
+            }
+        }
+
+        PrintContainer(dynamicArray);
+
+        //Логика замены элементов. Пробегаемся только до половины так как дальше нет смысла считать
+        for (int i = 0; i < dynamicArray.size() / 2; ++i) {
+            int opponent = dynamicArray[(dynamicArray.size() - 1) - i];
+            if ( opponent != 0) {
+                double tmp = dynamicArray[i];
+                dynamicArray[i] = std::fmod(dynamicArray[i], opponent);
+                if (tmp != 0)
+                    dynamicArray[(dynamicArray.size() - 1) - i] = std::fmod(opponent, tmp);
+            }
+        }
+
+        RemoveMultiples(dynamicArray, 4);
+
+        PrintContainer(dynamicArray);
+
+        FindMinMaxValue(dynamicArray);
+
+        return 0;
     }
-    std::cout << '\n';
-}
-// ********************************************************************************************
-// print_container
-//
-// Выводит переданный массив в консоль(пока захардкожено 100).
-// ********************************************************************************************
-void print_container(const std::array<int, 100>& container)
-{
-    for (auto& item: container)
+
+    // ********************************************************************************************
+    // PrintContainer
+    //
+    // Выводит переданный вектор в консоль.
+    // ********************************************************************************************
+    void PrintContainer(const std::vector<int>& container)
     {
-        std::cout << item << " ";
-    }
-    std::cout << '\n';
-}
-
-// ********************************************************************************************
-// find_min_max_value
-//
-// Поиск минимального и максимального числа
-// ********************************************************************************************
-void find_min_max_value(const std::vector<double>& container){
-
-    const auto [min, max] = std::minmax_element(begin(container), end(container));
-    std::cout << "min = " << *min << ", max = " << *max << '\n';
-}
-
-// ********************************************************************************************
-// remove_value
-//
-// Удаляем из массива все картные 4 числа
-// ********************************************************************************************
-void remove_value(std::vector<double>& container , double value){
-    for (auto i = container.begin(); i != container.end(); ++i) {
-        if (std::fmod(*i, value) == 0) {
-            container.erase(i);
-            i--;
+        for (const int& item: container) {
+         std::cout << item << " ";
         }
-    }
-}
-
-int main(){
-
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<> distrib(-25, 25);
-    std::array<int, 100> array = {0};
-    std::vector<double> dynamicArray;
-
-    for (int & i : array){
-        i = distrib(gen);
+        std::cout << '\n';
     }
 
-    print_container(array);
-
-    for (int i : array) {
-        if ( i % 2 == 0 ){
-            dynamicArray.push_back(static_cast<double>(i));
+    // ********************************************************************************************
+    // PrintContainer
+    //
+    // Выводит переданный массив в консоль(пока захардкожено 100).
+    // ********************************************************************************************
+    void PrintContainer(const std::array<int, 100>& container)
+    {
+        for (auto &item: container) {
+            std::cout << item << " ";
         }
-    }
-    print_container(dynamicArray);
-
-    std::cout << "=====================dynamicArray.size()===================== " << dynamicArray.size() << "\n";
-
-    std::cout << "=====================dynamicArray.center===================== " << dynamicArray.size()/2 << "\n";
-
-    //Логика замены элементов. Пробегаемся только до половины так как дальше нет смысла считать
-    for (int i = 0; i < dynamicArray.size()/2; ++i) {
-        if (dynamicArray[(dynamicArray.size() - 1) - i] != 0) {
-            double tmp = dynamicArray[i];
-            dynamicArray[i] = std::fmod(dynamicArray[i], dynamicArray[(dynamicArray.size() - 1) - i]);
-            if (tmp != 0)
-                dynamicArray[(dynamicArray.size() - 1) - i] = std::fmod(dynamicArray[(dynamicArray.size() - 1) - i], tmp);
-        }
+        std::cout << '\n';
     }
 
-    remove_value( dynamicArray, 4.0 );
+    // ********************************************************************************************
+    // FindMinMaxValue
+    //
+    // Поиск минимального и максимального числа
+    // ********************************************************************************************
+    void FindMinMaxValue(const std::vector<int>& container)
+    {
+        const auto [min, max] = std::minmax_element(begin(container), end(container));
+        std::cout << "min = " << *min << ", max = " << *max << '\n';
+    }
 
-    print_container( dynamicArray );
+    // ********************************************************************************************
+    // RemoveValue
+    //
+    // Удаляем из массива все картные 4 числа
+    // ********************************************************************************************
+    void RemoveMultiples(std::vector<int>& container, int value)
+    {
+       for (std::vector<int>::iterator i = container.begin(); i != container.end(); ) {
+           if (std::fmod(*i, value) == 0) {
+              i = container.erase(i);
 
-    find_min_max_value( dynamicArray );
+           }else {
+               ++i;
 
-    return 0;
-}
+           }
+       }
+    }
